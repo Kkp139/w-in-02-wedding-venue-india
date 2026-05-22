@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { IconPlus, IconMinus } from "@tabler/icons-react";
 
 const faqs = [
   { q: "How far in advance should I book the venue?", a: "We recommend booking at least 6–12 months in advance for popular dates (November–February, auspicious dates). For off-season or weekday events, 3–4 months is usually sufficient. Contact us to check your preferred date's availability." },
@@ -15,31 +16,102 @@ const faqs = [
 
 export default function FAQ() {
   const [open, setOpen] = useState<number | null>(null);
+
   return (
-    <section className="py-20 bg-white" id="faq">
+    <section className="py-24 bg-gradient-to-b from-white to-rose-50/30" id="faq">
       <div className="max-w-3xl mx-auto px-6">
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: "easeOut" as const }} className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#1a0a00] mb-4">Frequently Asked Questions</h2>
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease: "easeOut" as const }}
+          className="text-center mb-14"
+        >
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-rose-100 to-pink-100 border border-rose-200 rounded-full px-4 py-2 mb-6"
+          >
+            <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+            <span className="text-rose-700 font-bold text-xs uppercase tracking-widest">
+              Have Questions?
+            </span>
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-5xl md:text-6xl font-serif font-bold text-gray-900"
+          >
+            Frequently Asked Questions
+          </motion.h2>
         </motion.div>
-        <div className="space-y-3">
+
+        {/* FAQ Accordion */}
+        <div className="space-y-4">
           {faqs.map((f, i) => (
-            <motion.div key={i} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ delay: i * 0.05, ease: "easeOut" as const }}
-              className="bg-rose-50 border border-rose-100 rounded-xl overflow-hidden">
-              <button onClick={() => setOpen(open === i ? null : i)}
-                className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-[#1a0a00] hover:bg-rose-100/50 transition-colors text-sm">
-                <span>{f.q}</span>
-                <motion.span animate={{ rotate: open === i ? 45 : 0 }} className="text-rose-500 text-2xl leading-none ml-4 shrink-0">+</motion.span>
-              </button>
+              className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white via-white to-pink-50 border border-white/80 shadow-lg hover:shadow-xl transition-all"
+            >
+              {/* Decorative orb */}
+              <div className="absolute -right-12 -top-12 w-24 h-24 bg-gradient-to-br from-rose-100 to-pink-100 rounded-full blur-2xl opacity-0 group-hover:opacity-40 transition-opacity" />
+
+              {/* Question Button */}
+              <motion.button
+                onClick={() => setOpen(open === i ? null : i)}
+                className="w-full flex items-center justify-between px-8 py-5 text-left font-serif font-bold text-gray-900 hover:text-rose-700 transition-colors relative z-10"
+              >
+                <span className="text-lg leading-snug max-w-xs sm:max-w-none">
+                  {f.q}
+                </span>
+                <motion.div
+                  animate={{ rotate: open === i ? 180 : 0 }}
+                  className="text-rose-600 flex-shrink-0 ml-4"
+                >
+                  {open === i ? (
+                    <IconMinus size={24} stroke={2.5} />
+                  ) : (
+                    <IconPlus size={24} stroke={2.5} />
+                  )}
+                </motion.div>
+              </motion.button>
+
+              {/* Answer */}
               <AnimatePresence>
                 {open === i && (
-                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: "easeOut" as const }} className="overflow-hidden">
-                    <p className="px-6 pb-5 text-slate-600 text-sm leading-relaxed">{f.a}</p>
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: "easeOut" as const }}
+                    className="overflow-hidden relative z-10"
+                  >
+                    <div className="h-px bg-gradient-to-r from-transparent via-rose-200 to-transparent" />
+                    <motion.p
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="px-8 py-5 text-gray-700 text-base leading-relaxed"
+                    >
+                      {f.a}
+                    </motion.p>
                   </motion.div>
                 )}
               </AnimatePresence>
+
+              {/* Border glow */}
+              <motion.div
+                whileHover={{ opacity: 1 }}
+                initial={{ opacity: 0 }}
+                className="absolute inset-0 rounded-2xl border border-rose-200 pointer-events-none group-hover:shadow-[inset_0_0_15px_rgba(236,72,153,0.1)] transition-all"
+              />
             </motion.div>
           ))}
         </div>
